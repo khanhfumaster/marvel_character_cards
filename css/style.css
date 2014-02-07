@@ -1,0 +1,65 @@
+body {
+	background-color: #111111;
+}
+
+a {
+	width: 100px;
+	display: inline-block;
+}
+
+.char-img {
+	display: none;
+	animation: fadein 2s;
+  -moz-animation: fadein 2s; /* Firefox */
+  -webkit-animation: fadein 2s; /* Safari and Chrome */
+  -o-animation: fadein 2s; /* Opera */
+}
+
+a:hover{
+	margin: -78.5px -25px;
+	width: 150px;
+	position: relative;
+	z-index: 999;
+}
+
+.img-thumbnail {
+	width: 100%;
+	position: relative;
+}
+
+.characters {
+	margin: 100px;
+}
+
+@keyframes fadein {
+    from {
+        opacity:0;
+    }
+    to {
+        opacity:1;
+    }
+}
+@-moz-keyframes fadein { /* Firefox */
+    from {
+        opacity:0;
+    }
+    to {
+        opacity:1;
+    }
+}
+@-webkit-keyframes fadein { /* Safari and Chrome */
+    from {
+        opacity:0;
+    }
+    to {
+        opacity:1;
+    }
+}
+@-o-keyframes fadein { /* Opera */
+    from {
+        opacity:0;
+    }
+    to {
+        opacity: 1;
+    }
+}
