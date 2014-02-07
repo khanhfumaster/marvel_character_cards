@@ -16,6 +16,6 @@ Look at the first two lines of the marvel_service.js file and replace the gibber
 
 Thanks to:
 ===========
-- [mezdef](https://github.com/mezdef) for helping with with the CSS
+- [mezdef](https://github.com/mezdef) for helping me with the CSS
   
   
