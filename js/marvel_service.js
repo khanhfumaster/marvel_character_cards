@@ -1,12 +1,12 @@
-var publicKey = "lolol";
-var privateKey = "lololol";
+var publicKey = "LOLOL";
+var privateKey = "LOLOLOL";
 
 var CHARACTERS = [];
 var IMG_COUNTER = 0;
 var IMG_SHOW_COUNTER = 0;
 
 // num of characters is 1400
-var NUM_OF_CHARACTERS = 100;
+var NUM_OF_CHARACTERS = 1400;
 var PORTRAIT_SMALL = "portrait_small";
 var PORTRAIT_MED = "portrait_medium";
 
@@ -51,13 +51,14 @@ function getCharacters(limit, offset) {
 				$(".characters").append(img);
 
 				//activate the tooltip to show character names
-				$('[data-toggle="tooltip"]').tooltip({
-		    		'placement': 'bottom'
+				$('[data-toggle="popover"]').popover({
+					'trigger': "hover",
+		    		'placement': 'right'
 				});
 
 				//TODO: when you click on a character thumbnail - find all relationships and highlight and link
 				$("#"+character.id).click(function(event){
-					findRelationships(character);
+					findRelationships(character, $(this));
 				});
 			})
 
@@ -72,31 +73,136 @@ function getCharacters(limit, offset) {
 
 // Parse the the image to html with tooltip
 function parseThumbnailToHTML(url, variant, extension, charName, id) {
-	var img = '<a id="' + id +'"><div class="character-card"><img id="char_' + IMG_COUNTER  + '" src="'+ url + '/' + variant + '.' 
+	var img = '<a id="' + id +'" data-toggle="popover" data-content="TODO PUT DESCRIPTION AND WHERE THEY MET MAIN DUDE"><div class="character-card"><img id="char_' + IMG_COUNTER  + '" src="'+ url + '/' + variant + '.' 
 	+  extension + '"class="img-thumbnail char-img"/><p class="character-name">'+ charName +'</p></div></a>';
 
 	IMG_COUNTER += 1;
 	return img;
 }
 
-function showImages(){
+// fades the cards in
+function showCards(){
 	if (ready){
 		$('#char_'+IMG_SHOW_COUNTER).css('display', 'inline-block');
+		$('#char_'+IMG_SHOW_COUNTER).next('.character-name').css('display', 'inline-block');
 		IMG_SHOW_COUNTER += 1;
 	}
 }
 
 // find the relationships of a character based on the events, series and stories matching
-// GREEN LINE means 3 commons
-// ORANGE LINE means 2 commons
-// GREY LINE means 1 common - minor connection
-function findRelationships(character){
-	alert(character.name)
+// GREEN LINE means EVENTS
+// ORANGE LINE means SERIES
+// GREY LINE means STORIES
+function findRelationships(character, card){
+	
+	// Apply the overlay and keep the card selected
+	// TODO: Maybe increase the image size even more and move to center
+	$("a").removeClass('card-selected');
+	$("a").removeClass('card-matched');		
+	$(".overlay").show();
+	card.addClass('card-selected');
+
+	console.log(character);
+
+	var matchingEvents = [];
+	var matchingSeries = [];
+	var matchingStories = [];
+
+	// match events
+	if (character.events.available != 0) {
+		character.events.items.forEach(function(item){
+
+			CHARACTERS.forEach(function(hero){
+				if (character.id != hero.id){
+					if (hero.events.available != 0) {
+						hero.events.items.forEach(function(heroEvent){
+							if (item.resourceURI == heroEvent.resourceURI) {
+								var match = {hero: hero, matchEvent: heroEvent};
+								matchingEvents.push(match);
+							}
+						});
+					}
+				}
+				
+			})
+
+		});
+	}
+
+	// match series
+	if (character.series.available != 0) {
+		character.series.items.forEach(function(item){
+
+			CHARACTERS.forEach(function(hero){
+				if (character.id != hero.id){
+					if (hero.series.available != 0) {
+						hero.series.items.forEach(function(heroSeries){
+							if (item.resourceURI == heroSeries.resourceURI) {
+								var match = {hero: hero, matchSeries: heroSeries};
+								matchingSeries.push(match);
+							}
+						});
+					}
+				}
+				
+			})
+
+		});
+	}
+
+	// match stories
+	if (character.stories.available != 0) {
+		character.stories.items.forEach(function(item){
+
+			CHARACTERS.forEach(function(hero){
+				if (character.id != hero.id){
+					if (hero.stories.available != 0) {
+						hero.stories.items.forEach(function(heroStories){
+							if (item.resourceURI == heroStories.resourceURI) {
+								var match = {hero: hero, matchStories: heroStories};
+								matchingStories.push(match);
+							}
+						});
+					}
+				}
+				
+			})
+
+		});
+	}
+
+	if (matchingEvents.length != 0) {
+		matchingEvents.forEach(function(match){
+			$('#'+match.hero.id).addClass('card-matched');
+		})
+	}
+
+	if (matchingSeries.length != 0) {
+		matchingSeries.forEach(function(match){
+			$('#'+match.hero.id).addClass('card-matched');
+		})
+	}
+
+	if (matchingStories.length != 0) {
+		matchingStories.forEach(function(match){
+			$('#'+match.hero.id).addClass('card-matched');
+		})
+	}
 }
+
 
 // WHERE THE MARVEL MAGIC HAPPENS
 $(document).ready(function() {
+	$(".overlay").hide();
+	// $("#canvas").hide();
 	getCharacters(100, 0);
-	var intervalID = window.setInterval(showImages, 20);
+	var intervalID = window.setInterval(showCards, 20);
+
+	// if click the overlay then reset all cards
+	$('.overlay').click(function(){
+		$(".overlay").hide();
+		$("a").removeClass('card-selected');
+		$("a").removeClass('card-matched');		
+	});
 
 });
