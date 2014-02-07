@@ -3,7 +3,7 @@ Marvel Character Cards
 
 Playing with the Marvel API: http://developer.marvel.com/
 
-Loads up all the characters it can fetch from the API and displays them. When the user clicks on a card, it will show who this character has met (been in a event/series/story) together.
+Loads up all the characters it can fetch from the API and displays them. When the user clicks on a card, it will show who this character has met (been in a event/series/story together).
 
 ![alt tag](screenshots/1.png)
 ![alt tag](screenshots/2.png)
