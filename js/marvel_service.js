@@ -1,14 +1,14 @@
-var publicKey = "INSERT PUBLIC KEY HERE PLZ";
-var privateKey = "I REALLY NEED A BETTER WAY TO DO THIS...";
+var publicKey = "lolol";
+var privateKey = "lololol";
 
-var CHARACTERS = []
+var CHARACTERS = [];
 var IMG_COUNTER = 0;
 var IMG_SHOW_COUNTER = 0;
 
 // num of characters is 1400
-var NUM_OF_CHARACTERS = 1400
-var PORTRAIT_SMALL = "portrait_small"
-var PORTRAIT_MED = "portrait_medium"
+var NUM_OF_CHARACTERS = 100;
+var PORTRAIT_SMALL = "portrait_small";
+var PORTRAIT_MED = "portrait_medium";
 
 var ready = false;
 
@@ -43,6 +43,7 @@ function getCharacters(limit, offset) {
 
 			results.forEach(function(character){
 				// console.log(character);
+				CHARACTERS.push(character);
 				var img = parseThumbnailToHTML(character.thumbnail.path, PORTRAIT_MED, character.thumbnail.extension, character.name, character.id);
 
 				//display character thumbnails on the page
@@ -71,9 +72,8 @@ function getCharacters(limit, offset) {
 
 // Parse the the image to html with tooltip
 function parseThumbnailToHTML(url, variant, extension, charName, id) {
-	var img = '<a data-toggle="tooltip" title="'+charName+ '"' 
-	+ 'id="' + id +'"><img id="char_' + IMG_COUNTER  + '" src="'+ url + '/' + variant + '.' 
-	+  extension + '"class="img-thumbnail char-img"/></a>';
+	var img = '<a id="' + id +'"><div class="character-card"><img id="char_' + IMG_COUNTER  + '" src="'+ url + '/' + variant + '.' 
+	+  extension + '"class="img-thumbnail char-img"/><p class="character-name">'+ charName +'</p></div></a>';
 
 	IMG_COUNTER += 1;
 	return img;
@@ -94,12 +94,9 @@ function findRelationships(character){
 	alert(character.name)
 }
 
+// WHERE THE MARVEL MAGIC HAPPENS
 $(document).ready(function() {
-	// set offset to 100 when testing to save api calls
-	// for (var offset = 0; offset <= NUM_OF_CHARACTERS; offset += 100) {
-	// 	getCharacters(100, offset);
-	// };
 	getCharacters(100, 0);
-	var intervalID = window.setInterval(showImages, 50);
+	var intervalID = window.setInterval(showImages, 20);
 
 });

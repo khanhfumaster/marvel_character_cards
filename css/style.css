@@ -20,6 +20,8 @@ a:hover{
 	width: 150px;
 	position: relative;
 	z-index: 999;
+    -webkit-box-shadow: 25px 25px 80px 0 #1C1C1C;
+    box-shadow: 25px 25px 80px 0 #1C1C1C;
 }
 
 .img-thumbnail {
@@ -29,6 +31,21 @@ a:hover{
 
 .characters {
 	margin: 100px;
+}
+
+.character-card { 
+   position: relative; 
+   width: 100%; /* for IE 6 */
+}
+
+.character-name { 
+   position: absolute; 
+   bottom: 0; 
+   left: 0; 
+   width: 100%; 
+   color: #ffffff;
+   text-align: center;
+   background-color: rgba(0,0,0,0.7);
 }
 
 @keyframes fadein {
