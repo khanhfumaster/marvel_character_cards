@@ -1,5 +1,6 @@
-var publicKey = "lolololololol";
-var privateKey = "this is getting out of hand... zzz";
+// MARVEL CHARACTER CARDS JAVASCRIPT MAGIC
+// Khanh Nguyen 2014
+// http://khanh.info
 
 // Variables for character cards
 var CHARACTERS = [];
@@ -24,13 +25,20 @@ function getCharacters(limit, offset) {
 	offset = typeof offset !== 'undefined' ? offset : 0;
 
 	var results;
-	var ts = $.now();	
-	var hash = $.md5(ts+privateKey+publicKey);
-	var url = "http://gateway.marvel.com/v1/public/characters?"+
-												"apikey=" + publicKey +
-												"&ts=" + ts +
-												"&hash=" + hash;
+	var url;
 
+	$.ajax({
+		url: 'http://khanh.info/marvel_api/get_characters_url/',
+		async: false,
+		data: {	'secret': 'lol plz'
+		},
+		success: function (data) {
+			console.log(data)
+			url = data;
+		}
+	})
+
+	console.log(url)
 	if (typeof limit !== 'undefined') {
 		url = url + "&limit=" + limit;
 	}
