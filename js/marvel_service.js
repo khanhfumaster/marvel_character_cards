@@ -1,6 +1,7 @@
-var publicKey = "qwerqwerqwer";
-var privateKey = "qwerqwerqwerqwer";
+var publicKey = "lolololololol";
+var privateKey = "this is getting out of hand... zzz";
 
+// Variables for character cards
 var CHARACTERS = [];
 var IMG_COUNTER = 0;
 var IMG_SHOW_COUNTER = 0;
@@ -10,7 +11,11 @@ var NUM_OF_CHARACTERS = 1400;
 var PORTRAIT_SMALL = "portrait_small";
 var PORTRAIT_MED = "portrait_medium";
 
+// ready as in ready to start fading in images
 var ready = false;
+
+// search terms inputted by the user
+var SEARCH_TERM = '';
 
 // GET /v1/public/characters
 function getCharacters(limit, offset) {
@@ -97,7 +102,10 @@ function findRelationships(character, card){
 	card.removeClass('card-hover');
 	removePopovers();
 	$(".card-a").removeClass('card-selected');
-	$(".card-a").removeClass('card-matched');		
+	$(".card-a").removeClass('card-matched');
+	$(".card-a").removeClass('card-hovered');	
+
+
 	$(".overlay").show();
 	card.addClass('card-selected');
 
@@ -316,23 +324,96 @@ function removePopovers() {
 	$(".card-a").popover('destroy');
 }
 
+function resetCards() {
+	$(".overlay").hide();
+	$(".card-a").removeClass('card-selected');
+	$(".card-a").removeClass('card-matched');	
+	$(".card-a").removeClass('card-hovered');	
+	removePopovers();
+	//fix hovering
+	$(".card-a").addClass('card-hover')
+}
+
+function clearSearchTerms() {
+	if (SEARCH_TERM != ''){
+		resetCards();
+		quickSearch();				
+	}
+	SEARCH_TERM = '';
+	$(".search-overlay").hide();
+}
+
+function quickSearch() {
+	var searchResults = [];
+	CHARACTERS.forEach(function(character){
+		// console.log(character.name.toLowerCase())
+		var lowerCaseCharacterName = character.name.toLowerCase();
+		var lowerCaseSearchTerm = SEARCH_TERM.toLowerCase();
+
+		if (lowerCaseCharacterName.indexOf(lowerCaseSearchTerm) > -1){
+			// console.log(character.name, SEARCH_TERM)
+			
+
+			searchResults.push(character);
+		}
+	});
+
+	if (searchResults.length != 0) {
+		var character = searchResults[0]
+		var p = $("#"+character.id).position()
+		var top = p.top - 100;
+		$.scrollTo({top:top, left:p.left})
+
+		searchResults.forEach(function (character){
+			$("#"+character.id).addClass("card-hovered");
+		})
+	}
+}
+
 // WHERE THE MARVEL MAGIC HAPPENS
 $(document).ready(function() {
+	$(".search-overlay").hide();
 	$(".overlay").hide();
 	// $("#canvas").hide();
 	getCharacters(100, 0);
-	var intervalID = window.setInterval(showCards, 20);
+	var showCardsInterval = window.setInterval(showCards, 20);
 
 	// if click the overlay then reset all cards
 	$('.overlay').click(function(){
-		$(".overlay").hide();
-		$(".card-a").removeClass('card-selected');
-		$(".card-a").removeClass('card-matched');		
-		removePopovers();
-		//fix hovering
-		$(".card-a").addClass('card-hover')
+		resetCards()
 	});
 
-	//TODO: implement quick search
+	// resets the card if ESC is pressed
+	$(document).on('keydown', function(e){
+		// console.log(e.keyCode);
+		if (e.keyCode == 27) {
+			resetCards();
+		}
+	});
 
+	// start the serach term reset thingy
+	var clearSearchTermsInterval = window.setInterval(clearSearchTerms, 1200);
+	// catches search terms from keyboard
+	$(document).on('keypress', function(e){
+		// stop the clear thingy
+		clearInterval(clearSearchTermsInterval);
+
+		// handles the spacebar press -> do not scroll!-
+		if (e.keyCode == 32) {
+			e.preventDefault();
+		}
+		
+		var newTerm = SEARCH_TERM + String.fromCharCode(e.charCode);
+		if (newTerm.trim() != ''){
+			SEARCH_TERM = SEARCH_TERM + String.fromCharCode(e.charCode)
+
+			// console.log(SEARCH_TERM)
+			$(".search-overlay").show();
+			$(".search-term").text(SEARCH_TERM);
+
+		}
+		
+		//start clear thingy
+		clearSearchTermsInterval = window.setInterval(clearSearchTerms, 1200);
+	})
 });
