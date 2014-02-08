@@ -33,7 +33,6 @@ function getCharacters(limit, offset) {
 		data: {	'secret': 'lol plz'
 		},
 		success: function (data) {
-			console.log(data)
 			url = data;
 		}
 	})
