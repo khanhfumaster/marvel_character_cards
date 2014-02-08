@@ -1,5 +1,5 @@
-var publicKey = "lololololo";
-var privateKey = "WRITE THAT BLOODY WRAPPER ALREADY";
+var publicKey = "qwerqwerqwer";
+var privateKey = "qwerqwerqwerqwer";
 
 var CHARACTERS = [];
 var IMG_COUNTER = 0;
@@ -96,8 +96,8 @@ function findRelationships(character, card){
 	//removes the hover on the selected card because it looks weird...
 	card.removeClass('card-hover');
 	removePopovers();
-	$("a").removeClass('card-selected');
-	$("a").removeClass('card-matched');		
+	$(".card-a").removeClass('card-selected');
+	$(".card-a").removeClass('card-matched');		
 	$(".overlay").show();
 	card.addClass('card-selected');
 
@@ -310,10 +310,10 @@ function showPopovers() {
 
 // remove popovers DESTROY IT!
 function removePopovers() {
-	$("a").removeAttr('data-toggle');
-	$("a").removeAttr('data-original-title');
-	$("a").removeAttr('data-content');
-	$("a").popover('destroy');
+	$(".card-a").removeAttr('data-toggle');
+	$(".card-a").removeAttr('data-original-title');
+	$(".card-a").removeAttr('data-content');
+	$(".card-a").popover('destroy');
 }
 
 // WHERE THE MARVEL MAGIC HAPPENS
@@ -326,12 +326,13 @@ $(document).ready(function() {
 	// if click the overlay then reset all cards
 	$('.overlay').click(function(){
 		$(".overlay").hide();
-		$("a").removeClass('card-selected');
-		$("a").removeClass('card-matched');		
+		$(".card-a").removeClass('card-selected');
+		$(".card-a").removeClass('card-matched');		
 		removePopovers();
 		//fix hovering
-		$("a").addClass('card-hover')
+		$(".card-a").addClass('card-hover')
 	});
 
+	//TODO: implement quick search
 
 });
