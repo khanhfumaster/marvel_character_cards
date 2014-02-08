@@ -1,5 +1,5 @@
-var publicKey = "LOLOL";
-var privateKey = "LOLOLOL";
+var publicKey = "lolol";
+var privateKey = "LOLOLOLOLOL";
 
 var CHARACTERS = [];
 var IMG_COUNTER = 0;
@@ -50,12 +50,6 @@ function getCharacters(limit, offset) {
 
 				$(".characters").append(img);
 
-				//activate the tooltip to show character names
-				$('[data-toggle="popover"]').popover({
-					'trigger': "hover",
-		    		'placement': 'right'
-				});
-
 				//TODO: when you click on a character thumbnail - find all relationships and highlight and link
 				$("#"+character.id).click(function(event){
 					findRelationships(character, $(this));
@@ -73,8 +67,9 @@ function getCharacters(limit, offset) {
 
 // Parse the the image to html with tooltip
 function parseThumbnailToHTML(url, variant, extension, charName, id) {
-	var img = '<a id="' + id +'" data-toggle="popover" data-content="TODO PUT DESCRIPTION AND WHERE THEY MET MAIN DUDE"><div class="character-card"><img id="char_' + IMG_COUNTER  + '" src="'+ url + '/' + variant + '.' 
-	+  extension + '"class="img-thumbnail char-img"/><p class="character-name">'+ charName +'</p></div></a>';
+	var img = '<a id="' + id +'" class="card-hover"><div class="character-card"><img id="char_' + IMG_COUNTER  
+	+ '" src="'+ url + '/' + variant + '.' + extension 
+	+ '"class="img-thumbnail char-img"/><p class="character-name">'+ charName +'</p></div></a>';
 
 	IMG_COUNTER += 1;
 	return img;
@@ -97,12 +92,19 @@ function findRelationships(character, card){
 	
 	// Apply the overlay and keep the card selected
 	// TODO: Maybe increase the image size even more and move to center
+
+	//removes the hover on the selected card because it looks weird...
+	card.removeClass('card-hover');
+	removePopovers();
 	$("a").removeClass('card-selected');
 	$("a").removeClass('card-matched');		
 	$(".overlay").show();
 	card.addClass('card-selected');
 
-	console.log(character);
+	card.attr('data-toggle', 'popover');
+	card.attr('data-original-title', '<strong>' + character.name + '</strong> appears in:');
+
+	// console.log(character);
 
 	var matchingEvents = [];
 	var matchingSeries = [];
@@ -111,6 +113,13 @@ function findRelationships(character, card){
 	// match events
 	if (character.events.available != 0) {
 		character.events.items.forEach(function(item){
+
+			if (typeof card.attr('data-content') != 'undefined'){
+				card.attr('data-content', card.attr('data-content') + '<br>' + item.name);
+			}
+			else {
+				card.attr('data-content', item.name)
+			}
 
 			CHARACTERS.forEach(function(hero){
 				if (character.id != hero.id){
@@ -133,6 +142,13 @@ function findRelationships(character, card){
 	if (character.series.available != 0) {
 		character.series.items.forEach(function(item){
 
+			if (typeof card.attr('data-content') != 'undefined'){
+				card.attr('data-content', card.attr('data-content') + '<br>' + item.name);
+			}
+			else {
+				card.attr('data-content', item.name)
+			}
+
 			CHARACTERS.forEach(function(hero){
 				if (character.id != hero.id){
 					if (hero.series.available != 0) {
@@ -154,6 +170,13 @@ function findRelationships(character, card){
 	if (character.stories.available != 0) {
 		character.stories.items.forEach(function(item){
 
+			if (typeof card.attr('data-content') != 'undefined'){
+				card.attr('data-content', card.attr('data-content') + '<br>' + item.name);
+			}
+			else {
+				card.attr('data-content', item.name)
+			}
+
 			CHARACTERS.forEach(function(hero){
 				if (character.id != hero.id){
 					if (hero.stories.available != 0) {
@@ -174,22 +197,124 @@ function findRelationships(character, card){
 	if (matchingEvents.length != 0) {
 		matchingEvents.forEach(function(match){
 			$('#'+match.hero.id).addClass('card-matched');
+			$('#'+match.hero.id).attr('data-toggle', 'popover');
+			$('#'+match.hero.id).attr('data-original-title', '<strong>' + character.name + '</strong>' + ' meets ' + match.hero.name +' in:');
+
+			if (typeof $('#'+match.hero.id).attr('data-content') != 'undefined'){
+				$('#'+match.hero.id).attr('data-content', $('#'+match.hero.id).attr('data-content') + '<br>' + match.matchEvent.name);
+			}
+			else {
+				$('#'+match.hero.id).attr('data-content', match.matchEvent.name)
+			}
 		})
 	}
 
 	if (matchingSeries.length != 0) {
 		matchingSeries.forEach(function(match){
 			$('#'+match.hero.id).addClass('card-matched');
+			$('#'+match.hero.id).attr('data-toggle', 'popover');
+			$('#'+match.hero.id).attr('data-original-title', '<strong>' + character.name + '</strong>' + ' meets ' + match.hero.name +' in:');
+			if (typeof $('#'+match.hero.id).attr('data-content') != 'undefined'){
+				$('#'+match.hero.id).attr('data-content', $('#'+match.hero.id).attr('data-content')  + '<br>' + match.matchSeries.name);
+			}
+			else {
+				$('#'+match.hero.id).attr('data-content', match.matchSeries.name)
+			}
 		})
 	}
 
 	if (matchingStories.length != 0) {
 		matchingStories.forEach(function(match){
 			$('#'+match.hero.id).addClass('card-matched');
+			$('#'+match.hero.id).attr('data-toggle', 'popover');
+			$('#'+match.hero.id).attr('data-original-title', '<strong>' + character.name + '</strong>' + ' meets ' + match.hero.name +' in:');
+			if (typeof $('#'+match.hero.id).attr('data-content') != 'undefined'){
+				$('#'+match.hero.id).attr('data-content', $('#'+match.hero.id).attr('data-content') + '<br>' + match.matchStories.name);
+			}
+			else {
+				$('#'+match.hero.id).attr('data-content', match.matchStories.name)
+			}
 		})
 	}
+
+	if (character.events.available == 0 && character.series.available == 0 && character.stories.available == 0) {
+		card.attr('data-content', 'nothing according to the API ...')
+	}
+
+	showPopovers();
 }
 
+// activate the popovers
+function showPopovers() {
+	$('[data-toggle="popover"]').popover({
+		'trigger': "hover",
+		'placement': function(tip, element) {
+			// https://github.com/twbs/bootstrap/issues/345
+		    var $element, above, actualHeight, actualWidth, below, boundBottom, boundLeft, boundRight, boundTop, elementAbove, elementBelow, elementLeft, elementRight, isWithinBounds, left, pos, right;
+		    isWithinBounds = function(elementPosition) {
+		      return boundTop < elementPosition.top && boundLeft < elementPosition.left && boundRight > (elementPosition.left + actualWidth) && boundBottom > (elementPosition.top + actualHeight);
+		    };
+		    $element = $(element);
+		    pos = $.extend({}, $element.offset(), {
+		      width: element.offsetWidth,
+		      height: element.offsetHeight
+		    });
+		    actualWidth = 283;
+		    actualHeight = 350;
+		    boundTop = $(document).scrollTop();
+		    boundLeft = $(document).scrollLeft();
+		    boundRight = boundLeft + $(window).width();
+		    boundBottom = boundTop + $(window).height();
+		    elementAbove = {
+		      top: pos.top - actualHeight,
+		      left: pos.left + pos.width / 2 - actualWidth / 2
+		    };
+		    elementBelow = {
+		      top: pos.top + pos.height,
+		      left: pos.left + pos.width / 2 - actualWidth / 2
+		    };
+		    elementLeft = {
+		      top: pos.top + pos.height / 2 - actualHeight / 2,
+		      left: pos.left - actualWidth
+		    };
+		    elementRight = {
+		      top: pos.top + pos.height / 2 - actualHeight / 2,
+		      left: pos.left + pos.width
+		    };
+		    above = isWithinBounds(elementAbove);
+		    below = isWithinBounds(elementBelow);
+		    left = isWithinBounds(elementLeft);
+		    right = isWithinBounds(elementRight);
+		    if (above) {
+		      return "top";
+		    } else {
+		      if (below) {
+		        return "bottom";
+		      } else {
+		        if (left) {
+		          return "left";
+		        } else {
+		          if (right) {
+		            return "right";
+		          } else {
+		            return "right";
+		          }
+		        }
+		      }
+		    }
+  		},
+		'html': true
+	});
+	$('[data-toggle="popover"]').popover('enable');
+}
+
+// remove popovers DESTROY IT!
+function removePopovers() {
+	$("a").removeAttr('data-toggle');
+	$("a").removeAttr('data-original-title');
+	$("a").removeAttr('data-content');
+	$("a").popover('destroy');
+}
 
 // WHERE THE MARVEL MAGIC HAPPENS
 $(document).ready(function() {
@@ -203,6 +328,10 @@ $(document).ready(function() {
 		$(".overlay").hide();
 		$("a").removeClass('card-selected');
 		$("a").removeClass('card-matched');		
+		removePopovers();
+		//fix hovering
+		$("a").addClass('card-hover')
 	});
+
 
 });
