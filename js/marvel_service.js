@@ -1,11 +1,11 @@
-var publicKey = "lolol";
-var privateKey = "LOLOLOLOLOL";
+var publicKey = "lololololo";
+var privateKey = "WRITE THAT BLOODY WRAPPER ALREADY";
 
 var CHARACTERS = [];
 var IMG_COUNTER = 0;
 var IMG_SHOW_COUNTER = 0;
 
-// num of characters is 1400
+// num of characters should be set to 1400
 var NUM_OF_CHARACTERS = 1400;
 var PORTRAIT_SMALL = "portrait_small";
 var PORTRAIT_MED = "portrait_medium";
@@ -67,7 +67,7 @@ function getCharacters(limit, offset) {
 
 // Parse the the image to html with tooltip
 function parseThumbnailToHTML(url, variant, extension, charName, id) {
-	var img = '<a id="' + id +'" class="card-hover"><div class="character-card"><img id="char_' + IMG_COUNTER  
+	var img = '<a id="' + id +'" class="card-a card-hover"><div class="character-card"><img id="char_' + IMG_COUNTER  
 	+ '" src="'+ url + '/' + variant + '.' + extension 
 	+ '"class="img-thumbnail char-img"/><p class="character-name">'+ charName +'</p></div></a>';
 
