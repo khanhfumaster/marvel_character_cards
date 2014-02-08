@@ -8,7 +8,8 @@ Loads up all the characters it can fetch from the API and displays them. When th
 ## Features
 
 - Who has this character met? By 'met' I mean if the characters have been in any other stories, events or series with another.
-- Quick search is avaiable. Just type and the javascript magic will find stuff for you. (Inspired by the character selection of DOTA2.)
+- Quick search is available. Just type something and the javascript magic will find stuff for you. (Inspired by the character selection of DOTA2.)
+- Press ESC key to reset the cards.
 
 ## Screenshots
 
