@@ -37,7 +37,6 @@ function getCharacters(limit, offset) {
 		}
 	})
 
-	console.log(url)
 	if (typeof limit !== 'undefined') {
 		url = url + "&limit=" + limit;
 	}
