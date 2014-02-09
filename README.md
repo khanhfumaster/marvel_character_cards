@@ -21,11 +21,9 @@ Loads up all the characters it can fetch from the API and displays them. When th
 
 ## Setup
 
-Well it's just HTML and JS at the moment so you don't really need to set anything up except for providing your own API key which you can get from the developer gateway. (This can still be done if you go back to the older commits)
+Go to marvel_api/get_characters_url/index.php and enter your public and private keys.
 
-Look at the first two lines of the marvel_service.js file and replace the gibberish with your public and private key. Will implement a PHP wrapper of some sorts in future - if bothered.
-
-USES PHP NOW - I GUESS I WAS BOTHERED...
+Host it up on WAMP/MAMP/LAMP or whatever server you use and it should work.
 
 ## TO DO
 
