@@ -2,6 +2,9 @@
 // Khanh Nguyen 2014
 // http://khanh.info
 
+//URLS
+var GET_CHARACTERS_URL = 'http://localhost/marvel_tree/marvel_api/get_characters_url/';
+var GET_CHARACTERS_JSON = 'http://localhost/marvel_tree/characters.json';
 // Variables for character cards
 var CHARACTERS = [];
 var IMG_COUNTER = 0;
@@ -28,7 +31,7 @@ function getCharacters(limit, offset) {
 	var url;
 
 	$.ajax({
-		url: 'http://khanh.info/marvel_api/get_characters_url/',
+		url: GET_CHARACTERS_URL,
 		async: false,
 		data: {	'secret': 'lol plz'
 		},
@@ -37,42 +40,66 @@ function getCharacters(limit, offset) {
 		}
 	})
 
-	if (typeof limit !== 'undefined') {
-		url = url + "&limit=" + limit;
-	}
-
-	if (typeof offset !== 'undefined') {
-		url = url + "&offset=" + offset;
-	}
-
-	$.ajax({
-		url: url,
-		dataType: 'json',
-		success: function(data) {
-			ready = true;
-			var results = data.data.results;
-
-			results.forEach(function(character){
-				// console.log(character);
-				CHARACTERS.push(character);
-				var img = parseThumbnailToHTML(character.thumbnail.path, PORTRAIT_MED, character.thumbnail.extension, character.name, character.id);
-
-				//display character thumbnails on the page
-
-				$(".characters").append(img);
-
-				//TODO: when you click on a character thumbnail - find all relationships and highlight and link
-				$("#"+character.id).click(function(event){
-					findRelationships(character, $(this));
-				});
-			})
-
-			var newOffset = offset + 100;
-			if (newOffset <= NUM_OF_CHARACTERS){
-				getCharacters(100, newOffset);
-			}
+	if (url != 'error'){
+		if (typeof limit !== 'undefined') {
+			url = url + "&limit=" + limit;
 		}
-	});
+
+		if (typeof offset !== 'undefined') {
+			url = url + "&offset=" + offset;
+		}
+
+		$.ajax({
+			url: url,
+			dataType: 'json',
+			success: function(data) {
+				ready = true;
+				var results = data.data.results;
+
+				results.forEach(function(character){
+					// console.log(character);
+					CHARACTERS.push(character);
+					var img = parseThumbnailToHTML(character.thumbnail.path, PORTRAIT_MED, character.thumbnail.extension, character.name, character.id);
+
+					//display character thumbnails on the page
+
+					$(".characters").append(img);
+
+					$("#"+character.id).click(function(event){
+						findRelationships(character, $(this));
+					});
+				})
+
+				var newOffset = offset + 100;
+				if (newOffset <= NUM_OF_CHARACTERS){
+					getCharacters(100, newOffset);
+				}
+			}
+		});	
+	}
+	else {
+		$.ajax({
+			url: GET_CHARACTERS_JSON,
+			dataType: "json",
+			async: false,
+			success: function(data) {
+				CHARACTERS = data;
+				ready = true;
+
+				CHARACTERS.forEach(function (character){
+					var img = parseThumbnailToHTML(character.thumbnail.path, PORTRAIT_MED, character.thumbnail.extension, character.name, character.id);
+
+					//display character thumbnails on the page
+					$(".characters").append(img);
+
+					$("#"+character.id).click(function(event){
+						findRelationships(character, $(this));
+					});
+				})
+			}
+		});
+	}
+	
 
 }
 

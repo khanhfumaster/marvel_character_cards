@@ -1,9 +1,9 @@
 <?php
-ini_set('display_errors', 'On');
+ini_set('display_errors', 'Off');
 	error_reporting(E_ALL);
 
-$public_key = "SOME KEY";
-$private_key = "SOME KEY";
+$public_key = "INSERT PUBLIC KEY HERE";
+$private_key = "INSERT PRIVATE KEY HERE";
 $ts = time();
 $combination = $ts;
 $combination .= $private_key;
@@ -17,8 +17,15 @@ $url .= $ts;
 $url .= "&hash=";
 $url .= $hash;
 
+
 if (isset($_GET['secret'])){
-	echo $url;
+	$test = file_get_contents($url);
+	if ($test === FALSE) {
+		echo "error";
+	}
+	else {
+		echo $url;
+	}
 }
 else {
 	echo 'Missing parameters. Please try again.';
