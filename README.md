@@ -12,6 +12,7 @@ Loads up all the characters it can fetch from the API and displays them. When th
 - Who has this character met? By 'met' I mean if the characters have been in any other stories, events or series with another.
 - Quick search is available. Just type something and the javascript magic will find stuff for you. (Inspired by the character selection of DOTA2.)
 - Press ESC key to reset the cards.
+- It now uses a pre-fetched json file if we run out of API calls or if the API service is down.
 
 ## Screenshots
 
@@ -28,7 +29,7 @@ USES PHP NOW - I GUESS I WAS BOTHERED...
 
 ## TO DO
 
-- Add caching so that we don't exceed our limit of calls
+- ~~Add caching so that we don't exceed our limit of calls~~
 - Add lines to connect characters
 - Add more stlying to make it look nicer and more visible
 
